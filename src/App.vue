@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const moveItem = (fromUpvoteType: UpvoteKey) => {
-      let toUpvoteType = "notFill";
+      let toUpvoteType: UpvoteKey = "notFill";
       switch (fromUpvoteType) {
         case "notSelected":
           toUpvoteType = "selected";
@@ -40,9 +40,10 @@ export default defineComponent({
 });
 </script>
 
-// key in v-for will return the key in the object, should be stirng.
 <template>
   <div class="wire-frame-container">
+    <!-- type script error -->
+    <!-- let key: keyof Upvotes -->
     <div class="Upvote-container" v-for="(value, key) in Upvotes">
       <Upvote
         v-for="value in Upvotes[key]"
