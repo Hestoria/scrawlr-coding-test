@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 export type State = {
   Upvotes: {
     notFill: UpvoteId[];
@@ -11,9 +13,10 @@ export type UpvoteId = string;
 export type UpvoteKey = keyof typeof state.Upvotes;
 
 export const state: State = {
+  // initialize state
   Upvotes: {
-    notSelected: [],
-    selected: [],
-    notFill: [],
+    notSelected: [v4()],
+    selected: [v4()],
+    notFill: [v4()],
   },
 };

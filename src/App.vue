@@ -2,6 +2,7 @@
 import { v4 } from "uuid";
 import { defineComponent } from "vue";
 import { mapState } from "vuex";
+import AddIconComponent from "./assets/add.svg?component";
 import Upvote from "./components/Upvote.vue";
 import { useStore } from "./store";
 import { MutationType } from "./store/mutations";
@@ -10,7 +11,7 @@ import { UpvoteId, UpvoteKey } from "./store/state";
 export default defineComponent({
   setup() {
     const store = useStore();
-    const moveItem = (fromUpvoteType: UpvoteKey) => {
+    const moveItem = (fromUpvoteType: UpvoteKey): void => {
       let toUpvoteType: UpvoteKey = "notFill";
       switch (fromUpvoteType) {
         case "notSelected":
@@ -25,18 +26,21 @@ export default defineComponent({
       }
       store.commit(MutationType.MoveItem, { fromUpvoteType, toUpvoteType });
     };
+
     const AddItem = (upvoteType: UpvoteKey, data: UpvoteId) => {
       store.commit(MutationType.AddItem, { upvoteType, data });
     };
-    const getUUid = () => {
+
+    const getUUid = (): string => {
       return v4();
     };
+
     return { moveItem, getUUid, AddItem };
   },
   name: "App",
   computed: { ...mapState(["Upvotes"]) },
   methods: {},
-  components: { Upvote },
+  components: { AddIconComponent, Upvote },
 });
 </script>
 
@@ -44,15 +48,17 @@ export default defineComponent({
   <div class="wire-frame-container">
     <!-- type script error -->
     <!-- let key: keyof Upvotes -->
-    <div class="Upvote-container" v-for="(value, key) in Upvotes">
-      <Upvote
-        v-for="value in Upvotes[key]"
-        :key="value"
-        :upvoteType="key"
-        @Click="moveItem(key)"
-      />
+    <div class="upvote-row" v-for="(value, key) in Upvotes">
+      <div class="upvote-container">
+        <Upvote
+          v-for="value in Upvotes[key]"
+          :key="value"
+          :upvoteType="key"
+          @Click="moveItem(key)"
+        />
+      </div>
       <div class="upvote-add-btn upvote-item" @click="AddItem(key, getUUid())">
-        +
+        <AddIconComponent />
       </div>
     </div>
   </div>
@@ -60,29 +66,29 @@ export default defineComponent({
 
 <style scope>
 .wire-frame-container {
+  overflow: auto;
   justify-self: center;
-  max-width: 720px;
+  max-width: 1024px;
   margin: auto;
   background-color: white;
   border-radius: 15px;
 }
-.upvote-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  margin: 0.25rem;
-  height: 30px;
-  width: 30px;
-}
 .upvote-add-btn {
   font-size: 24px;
-  cursor: pointer;
-  height: 30px;
-  width: 30px;
+  background-color: #f4f6f8;
 }
-.Upvote-container {
-  padding: 14px;
+.upvote-container {
+  padding: 12px;
+  margin: 20px;
+  display: flex;
+  border: 2px solid gray;
+  border-radius: 15px;
+  overflow: overlay;
+  height: 86px;
+  width: 85%;
+}
+.upvote-row {
+  align-items: center;
   display: flex;
 }
 </style>
